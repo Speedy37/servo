@@ -1491,7 +1491,7 @@ impl BlockFlow {
         debug_assert!(!self.is_inline_flex_item());
 
         // Compute the available space for us, based on the actual floats.
-        let rect = self.base.floats.available_rect(Au(0),
+        let rect = self.base.floats.available_rect(self.fragment.margin.block_start,
                                                    self.fragment.border_box.size.block,
                                                    content_box.size.inline);
         let available_inline_size = if let Some(rect) = rect {
@@ -1549,7 +1549,7 @@ impl BlockFlow {
             self.assign_inline_sizes(layout_context);
             // Re-run layout on our children.
             for child in flow::mut_base(self).children.iter_mut() {
-                sequential::traverse_flow_tree_preorder(child, layout_context);
+                sequential::traverse_flow_tree_preorder(child, layout_context, true);
             }
             // Assign our final-final block size.
             self.assign_block_size(layout_context);
